@@ -17,7 +17,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	redisConfig := &redisConfig{
+	redisConfig := &RedisConfig{
 		Host: os.Getenv("REDIS_HOST"),
 		Port: os.Getenv("REDIS_PORT"),
 	}
@@ -28,7 +28,7 @@ func main() {
 	middleware := NewRateLimiterMiddleware(limiter)
 	r.Use(middleware.Limit)
 
-	r.handle("/", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, World!"))
 	}).Methods("GET")
 
