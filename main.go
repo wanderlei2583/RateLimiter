@@ -1,6 +1,10 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -12,4 +16,23 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+
+	redisConfig := &redisConfig{
+		Host: os.Getenv("REDIS_HOST"),
+		Port: os.Getenv("REDIS_PORT"),
+	}
+
+	storage := NewRedisStorage(redisConfig)
+	limiter := NewRateLimiter(storage)
+
+	middleware := NewRateLimiterMiddleware(limiter)
+	r.Use(middleware.Limit)
+
+	r.handle("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello, World!"))
+	}).Methods("GET")
+
+	port := ":8080"
+	log.Printf("Server starting on port %s", port)
+	log.Fatal(http.ListenAndServe(port, r))
 }
