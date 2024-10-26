@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - IP_RATE_LIMIT=5
+      - IP_WINDOW_SECUNDS=1
+      - TOKEN_RATE_LIMIT=10
+      - TOKEN_WINDOW_SECUNDS=1
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
