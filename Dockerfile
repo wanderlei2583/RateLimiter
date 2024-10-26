@@ -1,24 +1,14 @@
-version: '3'
+FROM golang:1.21-alpine
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - IP_RATE_LIMIT=5
-      - IP_WINDOW_SECUNDS=1
-      - TOKEN_RATE_LIMIT=10
-      - TOKEN_WINDOW_SECUNDS=1
-    depends_on:
-      - redis
+WORKDIR /app
 
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
+COPY go.mod go.sum ./
+RUN go mod download
 
+COPY . .
+
+RUN go build -o main .
+
+EXPOSE 8080
+
+CMD ["./main"]
