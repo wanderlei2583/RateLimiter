@@ -8,10 +8,10 @@ import (
 )
 
 type RateLimiter struct {
-	storage RateLimiterStorage
+	storage RateLimitStorage
 }
 
-func NewRateLimiter(storage RateLimiterStorage) *RateLimiter {
+func NewRateLimiter(storage RateLimitStorage) *RateLimiter {
 	return &RateLimiter{storage: storage}
 }
 
