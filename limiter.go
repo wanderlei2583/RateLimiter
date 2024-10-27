@@ -40,6 +40,10 @@ func (rl *RateLimiter) IsAllowed(
 		return false, err
 	}
 
+	if limit == 0 || window == 0 {
+		return false, fmt.Errorf("Invalid rate limit configuration")
+	}
+
 	key := fmt.Sprintf("%s:%s", limitType, identifier)
 	count, err := rl.storage.Increment(
 		key,
@@ -49,5 +53,5 @@ func (rl *RateLimiter) IsAllowed(
 		return false, err
 	}
 
-	return count <= limit, nil
+	return count < limit, nil
 }
