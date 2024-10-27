@@ -22,13 +22,7 @@ func (m *RateLimitMiddleware) Limit(next http.Handler) http.Handler {
 		if token != "" {
 			allowed, err = m.limiter.IsAllowed(token, "token")
 		} else {
-			ip := r.RemoteAddr
-			if realIP := r.Header.Get("X-Real-IP"); realIP != "" {
-				ip = realIP
-			} else if forwardedFor := r.Header.Get("X-Forwarded-For"); forwardedFor != "" {
-				ip = strings.Split(forwardedFor, ",")[0]
-			}
-
+			ip := getClientIP(r)
 			allowed, err = m.limiter.IsAllowed(ip, "ip")
 		}
 
@@ -42,6 +36,7 @@ func (m *RateLimitMiddleware) Limit(next http.Handler) http.Handler {
 		}
 
 		if !allowed {
+			w.Header().Set("Retry-After", "10")
 			http.Error(
 				w,
 				"you have reached the maximum number of requests or actions allowed within a certain time frame",
@@ -52,4 +47,26 @@ func (m *RateLimitMiddleware) Limit(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func getClientIP(r *http.Request) string {
+	ip := r.Header.Get("X-Real-IP")
+	if ip != "" {
+		return ip
+	}
+
+	ip = r.Header.Get("X-Forwarded-For")
+	if ip != "" {
+		ips := strings.Split(ip, ",")
+		if len(ips) > 0 {
+			return strings.TrimSpace(ips[0])
+		}
+	}
+
+	ip = r.RemoteAddr
+	if strings.Contains(ip, ":") {
+		ip = strings.Split(ip, ":")[0]
+	}
+
+	return ip
 }
