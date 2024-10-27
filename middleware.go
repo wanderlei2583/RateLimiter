@@ -9,7 +9,7 @@ type RateLimitMiddleware struct {
 	limiter *RateLimiter
 }
 
-func NewRateLimiterMiddleware(limiter *RateLimiter) *RateLimitMiddleware {
+func NewRateLimitMiddleware(limiter *RateLimiter) *RateLimitMiddleware {
 	return &RateLimitMiddleware{limiter: limiter}
 }
 

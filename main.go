@@ -25,7 +25,7 @@ func main() {
 	storage := NewRedisStorage(redisConfig)
 	limiter := NewRateLimiter(storage)
 
-	middleware := NewRateLimiterMiddleware(limiter)
+	middleware := NewRateLimitMiddleware(limiter)
 	r.Use(middleware.Limit)
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
