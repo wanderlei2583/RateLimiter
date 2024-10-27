@@ -21,15 +21,16 @@ func (rl *RateLimiter) IsAllowed(
 ) (bool, error) {
 	var limit, window int
 	var err error
+
 	switch limitType {
 	case "ip":
-		limit, err = strconv.Atoi(os.Getenv("IP_LIMIT"))
+		limit, err = strconv.Atoi(os.Getenv("IP_RATE_LIMIT"))
 		if err != nil {
 			return false, err
 		}
 		window, err = strconv.Atoi(os.Getenv("IP_WINDOW_SECONDS"))
 	case "token":
-		limit, err = strconv.Atoi(os.Getenv("TOKEN_LIMIT"))
+		limit, err = strconv.Atoi(os.Getenv("TOKEN_RATE_LIMIT"))
 		if err != nil {
 			return false, err
 		}
