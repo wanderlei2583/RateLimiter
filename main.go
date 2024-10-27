@@ -29,7 +29,7 @@ func main() {
 	r.Use(middleware.Limit)
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, World!"))
+		w.Write([]byte("Requisição bem-sucedida"))
 	}).Methods("GET")
 
 	port := ":8080"
