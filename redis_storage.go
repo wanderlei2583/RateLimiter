@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+	redis "github.com/go-redis/redis/v8"
 )
 
 type RedisConfig struct {
@@ -27,7 +27,7 @@ func NewRedisStorage(config *RedisConfig) *RedisStorage {
 func (rs *RedisStorage) Increment(
 	key string,
 	expiry time.Duration,
-) (int error) {
+) (int, error) {
 	ctx := context.Background()
 
 	pipe := rs.client.Pipeline()
