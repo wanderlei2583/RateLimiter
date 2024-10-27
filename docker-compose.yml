@@ -10,9 +10,9 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - IP_RATE_LIMIT=5
-      - IP_WINDOW_SECUNDS=1
+      - IP_WINDOW_SECONDS=1
       - TOKEN_RATE_LIMIT=10
-      - TOKEN_WINDOW_SECUNDS=1
+      - TOKEN_WINDOW_SECONDS=1
     depends_on:
       - redis
 
