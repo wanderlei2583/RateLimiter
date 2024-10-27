@@ -58,6 +58,7 @@ cd RateLimiter
 ```bash
 docker-compose up --build
 ```
+![Build via docker-compose](screenshots/screenshot_01.jpg)
 
 O serviço estará disponível em `http://localhost:8080`
 
@@ -84,6 +85,10 @@ for i in {1..11}; do
     sleep 0.1
 done
 ```
+![Exemplo de uso](screenshots/screenshot_03.jpg)
+![Exemplo de uso](screenshots/screenshot_04.jpg)
+![Exemplo de uso](screenshots/screenshot_06.jpg)
+*Teste com o script em bash: [test.sh](github.com/wanderlei2583/RateLimiter/test.sh)*
 
 ## 🔍 Comportamento Esperado
 
@@ -100,12 +105,34 @@ done
 
 ## 🧪 Testes
 
-O projeto inclui testes automatizados que podem ser executados com:
+O projeto inclui testes automatizados que cobrem:
 
+1. Limitação básica por IP e token
+2. Casos de limite excedido
+3. Reset após expiração
+4. Erros de configuração
+5. Funcionamento do middleware
+
+E podem ser executado com o seguinte comando:
 ```bash
+# Executar todos os testes
 go test -v ./...
+
+# Executar com cobertura
+go test -cover ./...
+
+# Executar teste específico
+go test -v -run TestRateLimiterIP
 ```
 
+![Testes automatizados completos](screenshots/screenshot_02.jpg)
+*Teste realizado com o comando `go test -v ./...`*
+
+![Testes automatizados com cobertura](screenshots/screenshot_08.jpg)
+*Teste realizado com o comando `go test -cover ./...`*
+
+![Teste do comando especifico](screenshots/screenshot_07.jpg)
+*Teste realizado com o comando `go test -v -run TestRateLimiterIP`*
 
 ## 🔧 Design Patterns Utilizados
 
