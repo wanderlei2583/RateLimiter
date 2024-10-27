@@ -53,5 +53,5 @@ func (rl *RateLimiter) IsAllowed(
 		return false, err
 	}
 
-	return count < limit, nil
+	return count <= limit, nil
 }
