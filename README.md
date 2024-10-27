@@ -22,6 +22,7 @@ Este projeto implementa um rate limiter em Go que pode ser configurado para limi
 rate-limiter/
 ├── main.go                # Ponto de entrada da aplicação
 ├── limiter.go             # Implementação do rate limiter
+├── limiter_test.go        # Testes automatizados 
 ├── storage.go             # Interface de armazenamento
 ├── redis_storage.go       # Implementação Redis do storage
 ├── middleware.go          # Middleware HTTP
@@ -66,8 +67,10 @@ O serviço estará disponível em `http://localhost:8080`
 ```bash
 # Envie múltiplas requisições
 for i in {1..6}; do
-    curl http://localhost:8080/
-    echo
+    echo "Request $i:"
+    curl -i http://localhost:8080/
+    echo -e "\n"
+    sleep 0.1
 done
 ```
 
@@ -75,8 +78,10 @@ done
 ```bash
 # Envie múltiplas requisições com token
 for i in {1..11}; do
-    curl -H "API_KEY: abc123" http://localhost:8080/
-    echo
+    echo "Request $i:"
+    curl -i -H "API_KEY: abc123" http://localhost:8080/
+    echo -e "\n"
+    sleep 0.1
 done
 ```
 
@@ -92,6 +97,16 @@ done
    - Se configurado para 10 req/s, a 11ª requisição dentro de 1 segundo será bloqueada
    - A limitação por token tem precedência sobre a limitação por IP
 
+
+## 🧪 Testes
+
+O projeto inclui testes automatizados que podem ser executados com:
+
+```bash
+go test -v ./...
+```
+
+
 ## 🔧 Design Patterns Utilizados
 
 1. **Strategy Pattern:**
@@ -106,6 +121,7 @@ done
 - github.com/go-redis/redis/v8
 - github.com/gorilla/mux
 - github.com/joho/godotenv
+- github.com/stretchr/testify
 
 ## 📄 Licença
 
